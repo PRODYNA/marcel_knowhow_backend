@@ -1,4 +1,4 @@
-name: Build and push Docker image
+name: Backend build and push Docker image
 
 on:
   push:
@@ -34,5 +34,4 @@ jobs:
       with:
         context: .
         push: true
-        # tags: ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
         tags: ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:latest
