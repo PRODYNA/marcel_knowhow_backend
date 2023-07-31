@@ -56,7 +56,27 @@ docker buildx build \
 Push manually build image to registry
 Use `docker push jnicontainerregistry.azurecr.io/marcel_knowhow_backend:latest` to push the image to the registry.
 
-![Ingress Configuration](./images/backend_ingress.png)
+
 
 ## Continuous Integration and Deployment with GitHub Actions
 The project comes with a GitHub Actions workflow to build and push the image to the Azure Container Registry (see `./.github/workflows/backend.yaml`).
+
+To use push a new image to the Azure Container Registry set the three secrets in Github:
+- REGISTRY_LOGIN_SERVER
+- REGISTRY_USERNAME
+- REGISTRY_PASSWORD
+
+![ACR Secrets](docs/Github_actions_secrets.png)
+
+# Azure Container Apps Service
+- Set the Container app name to `marcel-knowhow-backend`.
+- Choose the latest backend image from the AZR.
+- Select **0.75 vCPU, 1.5 GB RAM** for CPU and Memory.
+- Provide an environment variable `MARCEL_DB_URI` to point to the database app `bolt://marcel-knowhow-db:7687`.
+- Enable Ingress
+- Accept trafffic from anywhere
+- Set the Target port to `8000`
+- After deployment set CORS wildcards for everything to for frontend access from different origin.
+
+
+![Ingress Configuration](docs/backend_ingress.png)

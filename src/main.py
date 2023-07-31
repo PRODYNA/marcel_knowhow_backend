@@ -16,7 +16,7 @@ app.add_middleware(
 
 @app.get("/")
 async def read_root() -> dict[str, bool]:
-    return {"system_okay": True}
+    return {"system_health": True}
 
 
 @app.get("/items/{item_id}")
