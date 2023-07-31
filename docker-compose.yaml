@@ -7,9 +7,23 @@ services:
     ports:
       - 8080:8000
     environment:
-      - MARCEL_DB_URI=bolt://localhost:7687
+      - MARCEL_DB_URI=bolt://marcel_knowhow_db:7687
     restart: unless-stopped 
     deploy:
       resources:
         limits:
           memory: 500m
+  marcel_knowhow_db:
+    container_name: marcel_knowhow_db
+    image: marcel_knowhow_db
+    ports:
+      - 7474:7474
+      - 7687:7687
+    environment:
+      - NEO4J_AUTH=none
+      - NEO4J_dbms_security_procedures_unrestricted=apoc.*
+    restart: unless-stopped 
+    deploy:
+      resources:
+        limits:
+          memory: 1G
