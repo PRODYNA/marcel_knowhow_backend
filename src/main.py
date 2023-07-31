@@ -17,12 +17,12 @@ app.add_middleware(
 
 
 @app.get("/")
-def read_root() -> dict[str, bool]:
+async def read_root() -> dict[str, bool]:
     return {"system_okay": True}
 
 
 @app.get("/items/{item_id}")
-def read_item(item_id: int, q: str | None = None):
+async def read_item(item_id: int, q: str | None = None):
     provider = ItemProvider.get_instance()
     item = provider.get_item(item_id)
     if item is not None:
@@ -32,10 +32,19 @@ def read_item(item_id: int, q: str | None = None):
 
 
 @app.get("/items")
-def read_items():
+async def read_items():
     provider = ItemProvider.get_instance()
     items = provider.get_items()
     return items
+
+
+@app.post("/quizz_results")
+async def create_quizz_results():
+    # TODO Create a quizz results class
+    # json_content = message.content.strip()
+    # dict = json.loads(json_content)
+    # selected_option = dict["selected_option"]
+    pass
 
 
 if __name__ == "__main__":
