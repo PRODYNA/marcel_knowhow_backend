@@ -10,11 +10,31 @@ Marcel Know How Backend Project
 ===============================
 This projects holds the backend functionality for Marcel's know how session.
 
+The backend provides an API to query general knowledge questions to be used in a quiz game.
+
+
 
 # Local Development Environment
-Inside VSC hit Ctrl+Shift+P and search for _python: create environment_.
-Select .venv the a Python executable with Python 3.10 or higher and choose to install the dependencies from the requirements.txt file.
+
+## Using Visual Studio Code
+Inside VSC hit Ctrl+Shift+P and search for `python: create environment`.
+Select `.venv`, a Python executable with Python 3.10 or higher and choose to install the dependencies from the requirements.txt file.
 You should be able to run and debug the Fast API server by hitting F5 on the main.py file.
+
+## Without Visual Studio Code
+It is recommened to create a virtual environment with Python 3.10 or higher.
+Given you have Python installed run run the following command in the project's root:
+```bash
+python3 -m venv .venv
+```
+Activate the virtual environment with:
+```bash
+source .venv/bin/activate
+```
+Install the dependencies with:
+```bash
+pip install -r requirements.txt
+```
 
 
 # Docker
