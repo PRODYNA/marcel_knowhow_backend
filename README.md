@@ -8,7 +8,13 @@
 ```
 Marcel Know How Backend Project
 ===============================
-This projects hold the backend functionality for Marcel's know how session.
+This projects holds the backend functionality for Marcel's know how session.
+
+
+# Local Development Environment
+Inside VSC hit Ctrl+Shift+P and search for _python: create environment_.
+Select .venv the a Python executable with Python 3.10 or higher and choose to install the dependencies from the requirements.txt file.
+You should be able to run and debug the Fast API server by hitting F5 on the main.py file.
 
 
 # Docker
