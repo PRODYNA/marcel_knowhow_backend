@@ -36,8 +36,21 @@ Install the dependencies with:
 pip install -r requirements.txt
 ```
 
+# Database
+The backend projects relies on a neo4j database to store the questions and answering results.
+All database related files are located in the `./db` folder.
 
-# Docker
+## Collecting questions
+The collect questions a python script is querying questions from the OpenAI GPT-4 model.
+To run the script you have to provide a valid OpenAI API key in a `.env` file in the project's root.
+
+Example:
+```
+openai.api_key=<YOUR_KEY>
+```
+
+
+# Shipping
 ## Local Docker Environment
 Local Docker image build:
 ```bash
@@ -58,3 +71,6 @@ docker buildx build \
 
 Push manually build image to registry
 Use `docker push jnicontainerregistry.azurecr.io/marcel_knowhow_backend:latest` to push the image to the registry.
+
+## Continuous Integration and Deployment with GitHub Actions
+The project comes with a GitHub Actions workflow to build and push the image to the Azure Container Registry (see `./.github/workflows/backend.yaml`).
