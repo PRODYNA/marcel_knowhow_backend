@@ -3,7 +3,8 @@ import json
 from jni_openai import OpenAi
 
 
-REL_FILE_PAHT = "db/questions_input/question_ai_output.json"
+AI_OUTPUT_REL_PATH = "db/questions_input/questions_ai_output.json"
+DB_IMPORT_REL_PATH = "db/docker_image/import/questions_import.cypher"
 NO_QUESTIONS = 50
 
 
@@ -18,22 +19,42 @@ def write_questions_to_json_file() -> None:
 	open_ai = OpenAi()
 	ai_questions = open_ai.create_quizz_questions(NO_QUESTIONS)
 
-	with open(REL_FILE_PAHT, "w") as file:
+	with open(AI_OUTPUT_REL_PATH, "w") as file:
 		file.write(ai_questions)
+	print(f"Questions written to {AI_OUTPUT_REL_PATH}")
 
 
-def read_questions_from_json_file() -> None:
-	with open(REL_FILE_PAHT, "r") as file:
+def read_questions_from_json_file() -> list[Item]:
+	items: list[Item] = []
+	with open(AI_OUTPUT_REL_PATH, "r") as file:
 		ai_questions = file.read()
 		questions: list[dict] = json.loads(ai_questions)
 		for question in questions:
 			item = Item(question["id"], question["question"], question["yes_answer"])
-			print(f'Item: "{item}"')
+			items.append(item)
+	no_items = len(items)
+	if no_items == 0:
+		raise Exception("No items found in json file")
+	print(f"Read {no_items} items from {AI_OUTPUT_REL_PATH}")
+	return items
+
+
+def create_db_import_file(items: list[Item]) -> None:
+	with open(DB_IMPORT_REL_PATH, "w") as file:
+		for item in items:
+			file.write(f' \
+			CREATE (q:Question {{\n \
+				id: {item.id},\n \
+				question: "{item.question}", \n \
+				yes_answer: {item.yes_answer}\n \
+			}});\n\n')
+	print(f"Import written to {DB_IMPORT_REL_PATH}")
 
 
 def main() -> None:
-	write_questions_to_json_file()
-	read_questions_from_json_file()
+	# write_questions_to_json_file()
+	items = read_questions_from_json_file()
+	create_db_import_file(items)
 
 
 if __name__ == "__main__":

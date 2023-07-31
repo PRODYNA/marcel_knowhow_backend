@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
-from jni_items import ItemProvider
+from jni_item_provider import ItemProvider
 
 
 app = FastAPI()
