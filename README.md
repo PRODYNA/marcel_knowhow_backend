@@ -67,19 +67,27 @@ The project comes with a GitHub Actions workflow to build and push the image to 
 The backend projects relies on a neo4j database to store the questions and answering results.
 All database related files are located in the `./db` folder.
 
-## Collecting questions
-The collect questions a python script is querying questions from the OpenAI GPT-4 model.
+## Import of Questions
+To collect and import questions to the database the python script at 
+`./db/questions_input/create_questions.py` is doing the job.
+This script is  
+- Querying questions from the OpenAI GPT-4 model
+- Writes the question in JSON file
+- Reads the JSON file and creates a cypher import file for neo4j
+
+The cypher import file will be written to `./db/docker_image/import/questsions_import.cypher`.
 To run the script you have to provide a valid OpenAI API key in a `.env` file in the project's root.
 
-Example:
+Example for `.env` file:
 ```
 openai.api_key=<YOUR_KEY>
 ```
+The database Dockerfile in `./db/docker_image/Dockerfile` will take the import file to create
+the containing questions as new nodes in the database when the database container starts up.
 
 ## Docker Setup
-
+Always _cd_ into `./db/docker_image`.
 ### Local Docker Environment
-cd into `./db/docker_image`.
 
 Build a local Docker image with:
 ```bash
@@ -88,7 +96,6 @@ docker buildx build -t marcel_knowhow_db .
 
 Use the docker compose file with `docker-compose up -d` to start the backend.
 Connect to local neo4j browser with `http://localhost:7474/browser/`.
-
 
 ### Image for Azure Container Registry and Azure Container Apps Service
 Build the docker image with:

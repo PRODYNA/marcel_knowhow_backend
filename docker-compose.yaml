@@ -6,6 +6,8 @@ services:
     image: marcel_knowhow_backend
     ports:
       - 8080:8000
+    environment:
+      - MARCEL_DB_URI=bolt://localhost:7687
     restart: unless-stopped 
     deploy:
       resources:

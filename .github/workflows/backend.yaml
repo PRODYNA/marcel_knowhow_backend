@@ -6,7 +6,7 @@ on:
       - main
 
 env:
-  IMAGE_NAME: marcel_knowhhow_backend
+  IMAGE_NAME: marcel_knowhow_backend
 
 jobs:
   build-and-push:

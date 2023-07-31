@@ -13,7 +13,7 @@ class ItemProvider:
 		return ItemProvider._instance
 
 	def __init__(self):
-		neo_bridge = NeoBridge("bolt://localhost:7687")
+		neo_bridge = NeoBridge()
 		self.items = neo_bridge.read_items()
 	
 	def get_item(self, item_id) -> Item | None:
