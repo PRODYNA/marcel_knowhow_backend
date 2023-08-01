@@ -58,7 +58,7 @@ Use `docker push jnicontainerregistry.azurecr.io/marcel_knowhow_backend:latest` 
 
 
 
-## Continuous Integration and Deployment with GitHub Actions
+## Continuous Integration and Devlivery with GitHub Actions
 The project comes with a GitHub Actions workflow to build and push the image to the Azure Container Registry (see `./.github/workflows/backend.yaml`).
 
 To use push a new image to the Azure Container Registry set the three secrets in Github:
