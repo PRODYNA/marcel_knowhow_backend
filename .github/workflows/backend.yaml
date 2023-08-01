@@ -2,8 +2,9 @@ name: Backend build and push Docker image
 
 on:
   push:
-    branches: 
-      - main
+    branches: [ master, main]
+  pull_request:
+    branches: [ master, main]
 
 env:
   IMAGE_NAME: marcel_knowhow_backend
