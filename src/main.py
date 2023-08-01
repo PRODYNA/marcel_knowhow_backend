@@ -33,7 +33,7 @@ async def read_item(item_id: int, q: str | None = None):
 async def read_items():
     provider = ItemProvider.get_instance()
     items = provider.get_items()
-    return items
+    return {"questions": items}
 
 
 @app.post("/quizz_results")
