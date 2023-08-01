@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 from jni_item_provider import ItemProvider
+from jni_types import ResultsServerRequest
 
 
 app = FastAPI()
@@ -37,13 +38,20 @@ async def read_items():
 
 
 @app.post("/quizz_results")
-async def create_quizz_results():
-    # TODO Create a quizz results class
-    # json_content = message.content.strip()
-    # dict = json.loads(json_content)
-    # selected_option = dict["selected_option"]
-    pass
+async def create_quizz_results(request: ResultsServerRequest):
+    questions = request.questions
+    answers = request.answers
+
+    # Count the number of correct answers.
+    correct_answers = 0
+    for i in range(len(questions)):
+        if questions[i].yes_answer == answers[i]:
+            correct_answers += 1
+
+    # Compute and return the ratio of correct answers.
+    correctness_ratio = correct_answers / len(questions)
+    return {"ratio": correctness_ratio}
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8080)

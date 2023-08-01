@@ -1,4 +1,4 @@
-from jni_item import Item
+from jni_types import Item
 from jni_neo_bridge import NeoBridge
 
 

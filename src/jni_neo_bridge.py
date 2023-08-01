@@ -1,7 +1,7 @@
 import os
 
 from neo4j import GraphDatabase, Driver
-from jni_item import Item
+from jni_types import Item
 
 NEO_URI_ENV_NAME = "MARCEL_DB_URI"
 NEO_USERNAME = "neo4j"
@@ -49,7 +49,7 @@ class NeoBridge:
 				id = record['q.id']
 				question = record['q.question']
 				yes_answer = record['q.yes_answer']
-				item = Item(id, question, yes_answer)
+				item = Item(id=id, question=question, yes_answer=yes_answer)
 				items.append(item)
 		return items
 	
