@@ -41,6 +41,7 @@ async def read_items():
 async def create_quizz_results(request: ResultsServerRequest):
     questions = request.questions
     answers = request.answers
+    react_times = request.reactTimes
 
     # Count the number of correct answers.
     correct_answers = 0

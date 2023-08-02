@@ -10,3 +10,4 @@ class Item(BaseModel):
 class ResultsServerRequest(BaseModel):
     questions: list[Item]
     answers: list[bool]
+    reactTimes: list[int]
