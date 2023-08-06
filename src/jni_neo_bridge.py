@@ -1,7 +1,8 @@
 import os
 
 from neo4j import GraphDatabase, Driver
-from jni_types import Item
+from jni_types import Answering, Item
+import jni_cypher
 
 NEO_URI_ENV_NAME = "MARCEL_DB_URI"
 NEO_USERNAME = "neo4j"
@@ -53,6 +54,41 @@ class NeoBridge:
 				items.append(item)
 		return items
 	
+	async def write_answering(self, answering: Answering) -> None:
+		try:
+			self._write_Answering(answering)
+		except Exception as e:
+			err_message = f"Error while writing answering to Neo4j: {e}"
+			print(err_message)
+			print("Attempting to reestablish connection to Neo4j...")
+			try:
+				self._destroy()
+			except Exception as e:
+				pass
+			try:
+				self._driver = NeoBridge._create_driver(BACKUP_NEO_URI)
+				print("Reloaded driver")
+				self._write_Answering(answering)
+			except Exception as e:
+				err_message = f"2nd Error while writing items to Neo4j: {e}"
+				print(err_message)
+				raise Exception(err_message)
+
+	def _write_Answering(self, answering: Answering) -> None:
+		with self._driver.session() as session:
+			cypher_query, cypher_params = jni_cypher.create_answering_cypher(answering)
+			result = session.run(cypher_query, cypher_params)
+			counter = 0
+			answering_uuid = None | str
+			for record in result:
+				counter += 1
+				answering_uuid = record['a.uuid']
+			if counter != 1 or answering_uuid is None:
+				raise Exception("Could not create answering")
+			for answer in answering.answers:
+				cypher_query, cypher_params = jni_cypher.create_answer_cypher(answer, str(answering_uuid))
+				session.run(cypher_query, cypher_params)	
+
 	@staticmethod
 	def _create_driver(uri: str) -> Driver:
 		driver = GraphDatabase.driver(uri, auth=(NEO_USERNAME, NEO_PASSWORD))

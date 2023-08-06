@@ -1,4 +1,6 @@
-from jni_types import Item
+import asyncio
+
+from jni_types import Answering, Item
 from jni_neo_bridge import NeoBridge
 
 
@@ -26,3 +28,7 @@ class ItemProvider:
 
 	def get_items(self) -> list[Item]:
 		return self.items
+	
+	def write_resultsAsCoroutine(self, answering: Answering) -> None:
+		neoBridge = NeoBridge()
+		asyncio.create_task(neoBridge.write_answering(answering))

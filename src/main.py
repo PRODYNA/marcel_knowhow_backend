@@ -1,8 +1,9 @@
+from datetime import datetime
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 from jni_item_provider import ItemProvider
-from jni_types import ResultsServerRequest
+from jni_types import Answer, Answering, ResultsServerRequest
 
 
 app = FastAPI()
@@ -40,17 +41,35 @@ async def read_items():
 @app.post("/quizz_results")
 async def create_quizz_results(request: ResultsServerRequest):
     questions = request.questions
-    answers = request.answers
+    in_answers = request.answers
     react_times = request.reactTimes
 
+    neo_answers: list[Answer] = []
     # Count the number of correct answers.
     correct_answers = 0
     for i in range(len(questions)):
-        if questions[i].yes_answer == answers[i]:
+        answer_correct = questions[i].yes_answer == in_answers[i]
+        if answer_correct:
             correct_answers += 1
+        neo_answering = Answer(
+            correct=answer_correct, 
+            question_id=questions[i].id, 
+            reaction_in_ms=react_times[i]
+        )
+        neo_answers.append(neo_answering)
 
     # Compute and return the ratio of correct answers.
     correctness_ratio = correct_answers / len(questions)
+    neo_answering = Answering(
+        ratio=correctness_ratio, 
+        time_stamp=datetime.now().isoformat(),
+        answers=neo_answers
+    )
+    
+    # Write the results to the database.
+    provider = ItemProvider.get_instance()
+    provider.write_resultsAsCoroutine(neo_answering)
+    
     return {"ratio": correctness_ratio}
 
 
